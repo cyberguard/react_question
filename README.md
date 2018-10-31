@@ -1,3 +1,26 @@
+Hi All, need some help on understanding how to load data async into form for editing in react.
+
+Specifically, the part where you get the data from a higher state passed in as props in a asynchronous manner. 
+
+How do you wire up the handle input so that the screen reflect what the user is typing if he is updating a form input ?
+
+I create a github project with the minimal thing to demonstrate what I mean @ https://github.com/cyberguard/react_question/tree/question_async_form_edit
+
+Basically, I have a form NewClientFom.jsx that has it's value passed to it's props, but it's loaded asynchronous (simulated with a 3sec pause in this demo) 
+
+The data is loaded in the redux store so NewClientFom.jsx shows a "Loading..." div until the data become available.
+
+Now as you can see, if I load the data from the props to the state in the constructor, the constructor is evaluated before the async call come back. leaving me with a state that never get updated with the value of the props.
+
+However if I pick it up from the props, it works great... until I try to edit. I can't modify the props, so how do I update the value of the input box as the user is modifying it to reflect the change ?
+
+I'm sure I'm overlooking something simple, but I've been stuck on this for a week and can't get any answer. all the demo are for empty form that you fill and submit. none of them are for edit of async loaded data.
+
+thanks in advance  for any pointer/tutorial/video 
+
+-------
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
