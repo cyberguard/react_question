@@ -1,49 +1,19 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
-class IndividuTextInput extends Component {
-  render() {
-    const { onChange, value, id } = this.props;
-
-    return (
-      <input
-        className="form-control form-control-sm"
-        id={id}
-        placeholder={id}
-        value={value}
-        required
-        onChange={onChange}
-      />
-    );
-  }
-}
-
-class TextInput extends Component {
-  render() {
-    const { onChange, value, id, label } = this.props;
-
-    return (
-      <div className="col-sm col-md-3 ">
-        <label className="form-control-sm" htmlFor={id}>
-          {label}
-        </label>
-        <IndividuTextInput id={id} value={value[id]} onChange={onChange} />
-      </div>
-    );
-  }
-}
-
 class NewClientForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      provinces: [],
-      client: {},
-      selectedClient: {}
-    };
+    this.state = { selectedClient: { ...props.selectedClient } };
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleReset = this.handleReset.bind(this);
+
+    this.getStateToUse_FromProps = this.getStateToUse_FromProps.bind(this);
+    this.getStateToUse_FromStateCopiedFromProps = this.getStateToUse_FromStateCopiedFromProps.bind(
+      this
+    );
   }
 
   handleInputChange(event) {
@@ -61,14 +31,39 @@ class NewClientForm extends Component {
     console.log(this.state);
   }
 
+  handleReset(event) {
+    alert("Reset to original value from redux store... somehow");
+  }
+
   handleSubmit(event) {
     event.preventDefault();
 
-    // submitClientPost(this.state.selectedClient);
-    this.props.history.push(this.props.path_to_on_submit);
+    alert("Would have saved " + JSON.stringify(this.state));
   }
-  render() {
+
+  // Option 1 - Get it from props on render.
+  // ==> But then how to I reflect a user changing value ?
+  getStateToUse_FromProps() {
     const { selectedClient = {} } = this.props;
+    return selectedClient;
+  }
+
+  // The async nature of the load, cause the constructor to be
+  // evaluated before the data is here.
+  // So it does not work... While the render method is called when props are udated, the state is not...
+  // Thus loading is never replaced by the form.
+  getStateToUse_FromStateCopiedFromProps() {
+    const { selectedClient = {} } = this.state;
+    return selectedClient;
+  }
+
+  render() {
+    // Use option1, from the props directly
+    const selectedClient = this.getStateToUse_FromProps();
+
+    // Use option2, from the state init from props in constructor
+    // This cause the form to never load
+    // const selectedClient = this.getStateToUse_FromStateCopiedFromProps();
 
     if (selectedClient.fetching) {
       return <div>Loading....</div>;
@@ -81,8 +76,14 @@ class NewClientForm extends Component {
           <input
             className="btn btn-primary"
             type="button"
-            value="Sauvegarder"
+            value="Save"
             onClick={this.handleSubmit}
+          />
+          <input
+            className="btn btn-primary"
+            type="button"
+            value="Reset"
+            onClick={this.handleReset}
           />
         </div>
         <form className="needs-validation" noValidate>
@@ -92,20 +93,32 @@ class NewClientForm extends Component {
           <div className="card-body">
             <div>
               <div className="row">
-                <TextInput
-                  id="name"
-                  value={cur_selected_client}
-                  onChange={this.handleInputChange}
-                  label="name"
-                />
+                <div className="col-sm col-md-3 ">
+                  <label className="form-control-sm" htmlFor="name">
+                    name
+                  </label>
+                  <input
+                    className="form-control form-control-sm"
+                    id="name"
+                    value={cur_selected_client["name"]}
+                    required
+                    onChange={this.handleInputChange}
+                  />
+                </div>
               </div>
               <div className="row">
-                <TextInput
-                  id="country"
-                  value={cur_selected_client}
-                  onChange={this.handleInputChange}
-                  label="country"
-                />
+                <div className="col-sm col-md-3 ">
+                  <label className="form-control-sm" htmlFor="country">
+                    country
+                  </label>
+                  <input
+                    className="form-control form-control-sm"
+                    id="country"
+                    value={cur_selected_client["country"]}
+                    required
+                    onChange={this.handleInputChange}
+                  />
+                </div>
               </div>
             </div>
           </div>

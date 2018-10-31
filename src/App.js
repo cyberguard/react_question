@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import { NavLink } from "react-router-dom";
-import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Route, HashRouter, BrowserRouter, Link } from "react-router-dom";
+import { Route, HashRouter } from "react-router-dom";
 import ClientList from "./ClientList";
 import NewClientForm from "./NewClientFom";
 import { bindActionCreators } from "redux";
@@ -71,12 +70,7 @@ const mapStateToProps = (state, props) => {
 
 const mapActionsToProps = (dispatch, props) => {
   console.log(props);
-  return bindActionCreators(
-    {
-      // setSelectedSejour: setSelectedSejour
-    },
-    dispatch
-  );
+  return bindActionCreators({}, dispatch);
 };
 
 export default connect(

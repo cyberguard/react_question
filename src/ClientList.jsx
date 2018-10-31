@@ -3,7 +3,6 @@ import "./App.css";
 import { NavLink } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Route, HashRouter, BrowserRouter, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import * as user from "./redux/client-actions";
 
@@ -31,7 +30,6 @@ class ClientList extends Component {
           <thead className="thead-dark">
             <tr>
               <th scope="col">edit</th>
-
               <th scope="col">id</th>
               <th scope="col">name</th>
             </tr>
