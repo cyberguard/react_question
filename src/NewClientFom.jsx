@@ -109,6 +109,7 @@ class NewClientForm extends Component {
         "getDerivedStateFromProps returning old state  " +
           JSON.stringify(prevState)
       );
+      return prevState;
     }
   }
 
