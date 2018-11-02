@@ -14,6 +14,8 @@ class NewClientForm extends Component {
     this.getStateToUse_FromStateCopiedFromProps = this.getStateToUse_FromStateCopiedFromProps.bind(
       this
     );
+
+    // this.getDerivedStateFromProps = this.getDerivedStateFromProps.bind(this);
   }
 
   handleInputChange(event) {
@@ -21,18 +23,37 @@ class NewClientForm extends Component {
     const value = target.type === "checkbox" ? target.checked : target.value;
     const id = target.id;
 
+    const newSelectedClient = {
+      ...this.state.selectedClient
+    };
+
+    newSelectedClient.data[id] = value;
+
     this.setState({
       selectedClient: {
-        ...this.state.selectedClient,
-        [id]: value
+        newSelectedClient
       }
     });
 
-    console.log(this.state);
+    console.log("handle inputchange " + JSON.stringify(this.state));
   }
 
   handleReset(event) {
-    alert("Reset to original value from redux store... somehow");
+    console.log(
+      "Reseted state to original value from props -> props:" +
+        JSON.stringify(this.props)
+    );
+    const resetState = {
+      selectedClient: {
+        ...this.props.selectedClient
+      }
+    };
+
+    this.setState(resetState);
+    console.log(
+      "Reseted state to original value from props -> state :" +
+        JSON.stringify(this.state)
+    );
   }
 
   handleSubmit(event) {
@@ -57,13 +78,47 @@ class NewClientForm extends Component {
     return selectedClient;
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(
+      "getDerivedStateFromProps State Was   " + JSON.stringify(prevState)
+    );
+    console.log(
+      "getDerivedStateFromProps props Was   " + JSON.stringify(nextProps)
+    );
+
+    const { propsSelectedClient = {} } = nextProps;
+    const { propsSelectedClientId = {} } = propsSelectedClient;
+
+    const { stateSelectedClient = {} } = prevState;
+    const { stateSelectedClientId = {} } = stateSelectedClient;
+
+    if (propsSelectedClientId !== stateSelectedClientId) {
+      const newState = {
+        selectedClient: {
+          ...nextProps.selectedClient
+        }
+      };
+
+      console.log(
+        "getDerivedStateFromProps State set to  " + JSON.stringify(newState)
+      );
+
+      return newState;
+    } else {
+      console.log(
+        "getDerivedStateFromProps returning old state  " +
+          JSON.stringify(prevState)
+      );
+    }
+  }
+
   render() {
     // Use option1, from the props directly
-    const selectedClient = this.getStateToUse_FromProps();
+    // const selectedClient = this.getStateToUse_FromProps();
 
     // Use option2, from the state init from props in constructor
     // This cause the form to never load
-    // const selectedClient = this.getStateToUse_FromStateCopiedFromProps();
+    const selectedClient = this.getStateToUse_FromStateCopiedFromProps();
 
     if (selectedClient.fetching) {
       return <div>Loading....</div>;

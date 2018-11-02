@@ -8,6 +8,17 @@ import NewClientForm from "./NewClientFom";
 import { bindActionCreators } from "redux";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { time: 1 };
+
+    this.rerender = this.rerender.bind(this);
+  }
+
+  rerender() {
+    this.setState({ time: this.state.time + 1 });
+  }
+
   render() {
     // For simplicity, simulate I have a list of client already provided by some rest call.
     const cur_client_page = [
@@ -15,12 +26,24 @@ class App extends Component {
       { id: 2, name: "Alice" },
       { id: 3, name: "Peter" }
     ];
+
     return (
       <HashRouter>
         <div className="App">
           <div>
+            <button
+              className="btn btn-secondary "
+              type="button"
+              onClick={this.rerender}
+            >
+              Trigger Outer app component rerender
+            </button>{" "}
+            Time for triggering rerender periodically : {this.state.time}
+          </div>
+
+          <div>
             <NavLink className="nav-link dropdown-item" to="/">
-              <button className="btn btn-secondary " type="button" id="gotHome">
+              <button className="btn btn-secondary " type="button" id="goHome">
                 Home
               </button>{" "}
             </NavLink>
